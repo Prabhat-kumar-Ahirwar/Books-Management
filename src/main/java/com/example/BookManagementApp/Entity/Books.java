@@ -1,17 +1,21 @@
 package com.example.BookManagementApp.Entity;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import org.springframework.stereotype.Repository;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.NoArgsConstructor;
 
-@Repository
+@Entity
+@Table(name = "books")
+@Getter
+@Setter
+@NoArgsConstructor
 public class Books {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     private String name;
     private String genre;
     private String author;
-
 }
