@@ -33,4 +33,13 @@ public class BookService {
                     .orElseThrow(() -> new RuntimeException("Book not found"));
             bookRepo.delete(books);
         }
+    public Books update(long id, Books updatedBook) {
+        Books existingBook = bookRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Book not found with id " + id));
+        existingBook.setName(updatedBook.getName());
+        existingBook.setAuthor(updatedBook.getAuthor());
+        existingBook.setGenre(updatedBook.getGenre());
+
+        return bookRepo.save(existingBook);
+    }
 }
