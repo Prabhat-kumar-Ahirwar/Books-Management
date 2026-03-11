@@ -6,7 +6,10 @@ import lombok.AllArgsConstructor;
 
 import lombok.Getter;
 import org.apache.coyote.Response;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.querydsl.QPageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,8 +24,8 @@ public class BookController {
     private final BookService bookService;
 
     @GetMapping("/all")
-    public ResponseEntity<List<Books>> getAll() {
-        List<Books> books = bookService.getAllBooks();
+    public ResponseEntity<Page<Books>> getAll(@RequestParam int page, @RequestParam int size) {
+        Page<Books> books = bookService.getAllBooks(page, size);
         return new ResponseEntity<>(books, HttpStatus.OK);
     }
 
@@ -46,10 +49,16 @@ public class BookController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/search/id/{id}")
     public ResponseEntity<Books> update(@PathVariable long id,@RequestBody Books book) {
         Books updatedBook = bookService.update(id, book);
         return new ResponseEntity<>(updatedBook, HttpStatus.OK);
+    }
+
+    @GetMapping("/search/name/{name}")
+    public ResponseEntity<Page<Books>> getBooksByName(@PathVariable String name , @RequestParam int page , @RequestParam int size){
+        Page Books = bookService.getBookByName(name,page,size);
+        return new ResponseEntity<>(Books,HttpStatus.OK);
     }
 }
 

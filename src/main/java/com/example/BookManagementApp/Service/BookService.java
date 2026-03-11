@@ -4,6 +4,9 @@ import com.example.BookManagementApp.Entity.Books;
 import com.example.BookManagementApp.Repository.BookRepo;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.awt.print.Book;
@@ -16,8 +19,9 @@ public class BookService {
     private final BookRepo bookRepo;
 
 
-    public List<Books> getAllBooks() {
-        return bookRepo.findAll();
+    public Page<Books> getAllBooks(int page , int size) {
+        Pageable pageable = PageRequest.of(page,size);
+        return bookRepo.findAll(pageable);
     }
 
     public Books addNewBook(Books book) {
@@ -41,5 +45,10 @@ public class BookService {
         existingBook.setGenre(updatedBook.getGenre());
 
         return bookRepo.save(existingBook);
+    }
+
+    public Page<Books> getBookByName(String name, int page, int size) {
+        Pageable pageable = PageRequest.of(page,size);
+        return bookRepo.findByNameContaining(name,pageable);
     }
 }
