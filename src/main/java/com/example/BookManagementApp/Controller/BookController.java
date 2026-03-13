@@ -1,7 +1,9 @@
 package com.example.BookManagementApp.Controller;
 
 import com.example.BookManagementApp.Entity.Books;
+import com.example.BookManagementApp.Exception.BookNotFoundException;
 import com.example.BookManagementApp.Service.BookService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
 import lombok.Getter;
@@ -30,16 +32,16 @@ public class BookController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Books> addBook(@RequestBody Books books) {
+    public ResponseEntity<Books> addBook(@Valid @RequestBody Books books) {
         Books book = bookService.addNewBook(books);
         return new ResponseEntity<>(book, HttpStatus.CREATED);
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Books> getBookById(@PathVariable long id){
+    public ResponseEntity<Books> getBookById(@PathVariable long id) throws BookNotFoundException {
         Books book = bookService.getBookById(id);
         if(book == null){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>( HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(book,HttpStatus.OK);
     }

@@ -1,6 +1,7 @@
 package com.example.BookManagementApp.Service;
 
 import com.example.BookManagementApp.Entity.Books;
+import com.example.BookManagementApp.Exception.BookNotFoundException;
 import com.example.BookManagementApp.Repository.BookRepo;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +29,8 @@ public class BookService {
         return bookRepo.save(book);
     }
 
-    public Books getBookById(long id) {
-        return bookRepo.findById(id).orElse(null);
+    public Books getBookById(long id) throws BookNotFoundException{
+        return bookRepo.findById(id).orElseThrow(()-> new BookNotFoundException("Book Not Found"));
     }
 
     public void remove(long id) {
