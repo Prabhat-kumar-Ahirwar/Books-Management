@@ -12,4 +12,6 @@ public interface BookRepo extends JpaRepository<Books, Long> {
     Page<Books> findByGenreContaining(String genre, Pageable pageable);
 
     Page<Books> findByAuthorContaining(String author, Pageable pageable);
+
+    Page<Books> findByPriceBetween(double minprice, double maxprice, Pageable pageable);
 }

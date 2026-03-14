@@ -6,73 +6,114 @@ import com.example.BookManagementApp.Service.BookService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
-import lombok.Getter;
-import org.apache.coyote.Response;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.querydsl.QPageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.awt.print.Book;
-import java.util.List;
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/books")
 @AllArgsConstructor
 public class BookController {
 
     private final BookService bookService;
 
-    @GetMapping("/all")
-    public ResponseEntity<Page<Books>> getAll(@RequestParam int page, @RequestParam int size) {
+    // Get all books with pagination
+    @GetMapping
+    public ResponseEntity<Page<Books>> getAllBooks(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size) {
+
         Page<Books> books = bookService.getAllBooks(page, size);
-        return new ResponseEntity<>(books, HttpStatus.OK);
+        return ResponseEntity.ok(books);
     }
 
-    @PostMapping("/add")
+    // Add new book
+    @PostMapping
     public ResponseEntity<Books> addBook(@Valid @RequestBody Books books) {
         Books book = bookService.addNewBook(books);
         return new ResponseEntity<>(book, HttpStatus.CREATED);
     }
 
-    @GetMapping("{id}")
+    // Get book by ID
+    @GetMapping("/{id}")
     public ResponseEntity<Books> getBookById(@PathVariable long id) throws BookNotFoundException {
+
         Books book = bookService.getBookById(id);
-        if(book == null){
-            return new ResponseEntity<>( HttpStatus.NOT_FOUND);
+
+        if (book == null) {
+            return ResponseEntity.notFound().build();
         }
-        return new ResponseEntity<>(book,HttpStatus.OK);
+
+        return ResponseEntity.ok(book);
     }
-    @DeleteMapping("{id}")
-    public ResponseEntity<Void> remove(@PathVariable long id){
+
+    // Delete book
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> removeBook(@PathVariable long id) {
+
         bookService.remove(id);
+
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/search/id/{id}")
-    public ResponseEntity<Books> update(@PathVariable long id,@RequestBody Books book) {
+    // Update book
+    @PutMapping("/{id}")
+    public ResponseEntity<Books> updateBook(
+            @PathVariable long id,
+            @RequestBody Books book) {
+
         Books updatedBook = bookService.update(id, book);
-        return new ResponseEntity<>(updatedBook, HttpStatus.OK);
+
+        return ResponseEntity.ok(updatedBook);
     }
 
+    // Search by name
     @GetMapping("/search/name/{name}")
-    public ResponseEntity<Page<Books>> getBooksByName(@PathVariable String name , @RequestParam int page , @RequestParam int size){
-        Page Books = bookService.getBookByName(name,page,size);
-        return new ResponseEntity<>(Books,HttpStatus.OK);
+    public ResponseEntity<Page<Books>> getBooksByName(
+            @PathVariable String name,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size) {
+
+        Page<Books> books = bookService.getBookByName(name, page, size);
+
+        return ResponseEntity.ok(books);
     }
 
+    // Search by genre
     @GetMapping("/search/genre/{genre}")
-    public ResponseEntity<Page<Books>> getBookByGenre(@PathVariable String genre , @RequestParam int page,int size){
-        Page Books = bookService.getBookByGenre(genre,page,size);
-        return new ResponseEntity<>(Books,HttpStatus.OK);
+    public ResponseEntity<Page<Books>> getBooksByGenre(
+            @PathVariable String genre,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size) {
+
+        Page<Books> books = bookService.getBookByGenre(genre, page, size);
+
+        return ResponseEntity.ok(books);
     }
 
-    @GetMapping("search/author/{author}")
-    public ResponseEntity<Page<Books>> getbyAuthor(@PathVariable String author , @RequestParam int page , @RequestParam int size){
-        Page books = bookService.getBookByAuthor(author,page,size);
-        return new ResponseEntity<>(books,HttpStatus.OK);
+    // Search by author
+    @GetMapping("/search/author/{author}")
+    public ResponseEntity<Page<Books>> getBooksByAuthor(
+            @PathVariable String author,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size) {
+
+        Page<Books> books = bookService.getBookByAuthor(author, page, size);
+
+        return ResponseEntity.ok(books);
+    }
+
+    // Filter by price range
+    @GetMapping("/filter/price")
+    public ResponseEntity<Page<Books>> getBooksByPriceRange(
+            @RequestParam int minprice,
+            @RequestParam int maxprice,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size) {
+
+        Page<Books> books = bookService.getBookByRange(minprice, maxprice, page, size);
+
+        return ResponseEntity.ok(books);
     }
 }
-
