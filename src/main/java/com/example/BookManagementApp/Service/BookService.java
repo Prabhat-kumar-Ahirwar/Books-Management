@@ -52,4 +52,9 @@ public class BookService {
         Pageable pageable = PageRequest.of(page,size);
         return bookRepo.findByNameContaining(name,pageable);
     }
+
+    public Page getBookByGenre(String genre, int page, int size) {
+        Pageable pageable = PageRequest.of(page,size);
+        return bookRepo.findByGenreContaining(genre,pageable);
+    }
 }
