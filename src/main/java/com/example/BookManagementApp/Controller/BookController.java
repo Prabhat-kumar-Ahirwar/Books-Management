@@ -68,5 +68,11 @@ public class BookController {
         Page Books = bookService.getBookByGenre(genre,page,size);
         return new ResponseEntity<>(Books,HttpStatus.OK);
     }
+
+    @GetMapping("search/author/{author}")
+    public ResponseEntity<Page<Books>> getbyAuthor(@PathVariable String author , @RequestParam int page , @RequestParam int size){
+        Page books = bookService.getBookByAuthor(author,page,size);
+        return new ResponseEntity<>(books,HttpStatus.OK);
+    }
 }
 

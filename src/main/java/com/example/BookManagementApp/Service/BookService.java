@@ -57,4 +57,10 @@ public class BookService {
         Pageable pageable = PageRequest.of(page,size);
         return bookRepo.findByGenreContaining(genre,pageable);
     }
+
+    public Page getBookByAuthor(String author, int page, int size)
+    {
+        Pageable pageable = PageRequest.of(page,size);
+        return bookRepo.findByAuthorContaining(author,pageable);
+    }
 }
