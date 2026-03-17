@@ -11,12 +11,19 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 @RestController
 @RequestMapping("/api/books")
 @AllArgsConstructor
 public class BookController {
 
     private final BookService bookService;
+    //Get Current User
+    @GetMapping("/current-user")
+    public String getCurrentUser(Principal principal){
+        return principal.getName();
+    }
 
     // Get all books with pagination
     @GetMapping
