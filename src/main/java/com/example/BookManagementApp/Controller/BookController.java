@@ -19,11 +19,11 @@ import java.security.Principal;
 public class BookController {
 
     private final BookService bookService;
-    //Get Current User
-    @GetMapping("/current-user")
-    public String getCurrentUser(Principal principal){
-        return principal.getName();
-    }
+//    //Get Current User
+//    @GetMapping("/current-user")
+//    public String getCurrentUser(Principal principal){
+//        return principal.getName();
+//    }
 
     // Get all books with pagination
     @GetMapping

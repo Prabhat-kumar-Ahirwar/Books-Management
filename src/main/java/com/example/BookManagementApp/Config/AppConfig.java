@@ -3,7 +3,6 @@ package com.example.BookManagementApp.Config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,13 +12,15 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 public class AppConfig {
     @Bean
     public UserDetailsService userDetailsService(){
-        UserDetails user = User.builder().username("prabhat").password(passwordEncoder().encode("abcd")).roles("ADMIN").build();
-        return new InMemoryUserDetailsManager(user);
+        return new InMemoryUserDetailsManager(
+                User.withUsername("prabhat")
+                        .password(passwordEncoder().encode("abcd"))
+                        .roles("ADMIN")
+                        .build()
+        );
     }
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
-
-
 }
